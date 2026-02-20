@@ -548,7 +548,8 @@ BmpImage::BMP_IMAGE_PIX_FMT BmpImage::alignImageLine(bool reverse) {
 }
 
 
-
+/*
+///// heap memory crash for ESP32
 void BmpImage::end() {
   m_aligned = false;
   if (m_bmp_buff != NULL) {
@@ -563,7 +564,19 @@ void BmpImage::end() {
     m_img_buff = NULL;
   }
 }
+*/
 
+// FIX to avoid heap memory crash
+void BmpImage::end() {
+  m_aligned = false;
+  
+  if (m_bmp_buff) {
+    free(m_bmp_buff);
+  }
+  
+  m_bmp_buff = NULL;
+  m_img_buff = NULL;
+}
 uint8_t* BmpImage::getBmpBuff() {
   return m_bmp_buff;
 }
